@@ -24,6 +24,7 @@ Git Working      |  CC.git                CC Working |                CC Remote
             ###### <-------------------------------------------------------+
             ######
 ```
+_Note: CC.git is view-private_
 
 ## Steps for Git users
 ```
