@@ -11,12 +11,13 @@ git commit -m "INIT - Setup Git-To-ClearCase"
 name=${PWD##*/}
 mkdir "../$name.git" && cd "../$name.git"
 git init --bare
+# Sore path to this folder for remote
+fullpath="$PWD"
 # Set up post-update
 wget -qP hooks "https://raw.githubusercontent.com/CodeCorrupt/Git-To-ClearCase/master/post-update"
 
 # Set up the bare repo as the remote
 cd "../$name"
-fullpath="$PWD$name.git"
 git remote add origin "file://$fullpath"
 git push -u origin master
 
