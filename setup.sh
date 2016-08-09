@@ -23,5 +23,11 @@ git push -u origin master
 wget -qP "$fullpath/hooks" "https://raw.githubusercontent.com/CodeCorrupt/Git-To-ClearCase/master/post-update"
 
 # instruct the user
+echo ""
+echo ""
+echo ""
+echo "******************************************************"
+echo "*************   All Done! :D   ***********************"
+echo "******************************************************"
 echo "You're all set, Simply run the following command where you want the project folder"
 echo "git clone $fullpath <<your task name>>"
