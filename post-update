@@ -22,7 +22,7 @@ exec < /dev/tty
 
 echo "**** Pulling changes into clearcase"
 # CD into the snapshot directory
-cd ../XLint
+cd cd "$(echo $PWD | sed -e 's/.git$//')"
 unset GIT_DIR
 
 # Update the snapshot
