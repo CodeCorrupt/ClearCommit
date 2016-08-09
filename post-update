@@ -9,7 +9,7 @@
 #	both of which are unhandled.... so don't
 #
 # escaping things is very weird in this file
-# and I'm not 100% about why or how. 
+# and I'm not 100% about why or how.
 # As you can see below, whenever escaping backslashes
 # in sed or awk you need n+1 backslashes than if it
 # were run directly on command line. With some
@@ -58,7 +58,7 @@ for line in `git diff --name-status "$oldSha" master`
 do
     status=`echo "$line" | awk '{print $1}'`
     file=`echo "$line" | awk '{print $2}' | sed -e 's. .\\\ .g'`
-    
+
     if [ "$status" == "A" ]; then
         echo "Do you want to add the file : $file"
         echo "NOTE: If you select yes, clearcase will generate warnings but still work"
