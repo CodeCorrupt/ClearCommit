@@ -5,7 +5,7 @@ git init
 # Add all files in the snapshot
 git add -A
 # Commit all the files
-git commit -m "INIT - Setup Git-To-ClearCase"
+git commit --allow-empty -m "INIT - Setup Git-To-ClearCase"
 
 # Make the bare repo one level above
 name=${PWD##*/}
