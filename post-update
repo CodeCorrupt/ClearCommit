@@ -1,21 +1,5 @@
 #!/bin/sh
 
-#####################################################
-# Notes
-# This currently only worked for modifying files
-# New files: Will not be added
-# Deleted files: will cause errors in snapshot
-# Renamed files: will be treated as a remove and add
-#	both of which are unhandled.... so don't
-#
-# escaping things is very weird in this file
-# and I'm not 100% about why or how.
-# As you can see below, whenever escaping backslashes
-# in sed or awk you need n+1 backslashes than if it
-# were run directly on command line. With some
-# Exceptions.
-#####################################################
-
 # Allows us to read user input below, assigns stdin to keyboard
 # REF: http://stackoverflow.com/questions/3417896/how-do-i-prompt-the-user-from-within-a-commit-msg-hook
 exec < /dev/tty
