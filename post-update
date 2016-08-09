@@ -1,0 +1,109 @@
+#!/bin/sh
+
+#####################################################
+# Notes
+# This currently only worked for modifying files
+# New files: Will not be added
+# Deleted files: will cause errors in snapshot
+# Renamed files: will be treated as a remove and add
+#	both of which are unhandled.... so don't
+#
+# escaping things is very weird in this file
+# and I'm not 100% about why or how. 
+# As you can see below, whenever escaping backslashes
+# in sed or awk you need n+1 backslashes than if it
+# were run directly on command line. With some
+# Exceptions.
+#####################################################
+
+# Allows us to read user input below, assigns stdin to keyboard
+# REF: http://stackoverflow.com/questions/3417896/how-do-i-prompt-the-user-from-within-a-commit-msg-hook
+exec < /dev/tty
+
+echo "**** Pulling changes into clearcase"
+# CD into the snapshot directory
+cd ../XLint
+unset GIT_DIR
+
+# Update the snapshot
+echo "**** Updating Clearcase snapshot"
+cleartool update .
+
+# Pull changes in and hijack the files
+echo "**** Fetching changes into clearcase files"
+git fetch origin master
+
+#Check working directory is clean
+echo "**** Checking the status of the working directory"
+if [ $(git status --porcelain 2>/dev/null| grep "^[^?]" | wc -l) -ne 0 ]
+then
+    echo "~~ERROR: Working directory not clean"
+        exit
+fi
+
+echo "**** Merging in origin master"
+# Save old sha to get log against
+oldSha=$(git rev-parse HEAD)
+git merge origin/master master
+
+#Checkout the files that are hijacked.
+echo "**** Begining checkout of now hijacked files"
+#             Get list of cleartool files        | only hijacked   |cut the filename|change \ --> /| escape spaces       | make online
+cleartool co -nc -usehijack `cleartool ls -recur | grep "hijacked" | cut -d '@' -f1 | tr '\\\' '/' | sed -e 's. .\\\ .g' | xargs`
+
+echo "**** If any new/deleted/renamed files, select the ones to add"
+# Set IFS to only newline so that lines are split properly
+IFS=$'\n'
+for line in `git diff --name-status "$oldSha" master`
+do
+    status=`echo "$line" | awk '{print $1}'`
+    file=`echo "$line" | awk '{print $2}' | sed -e 's. .\\\ .g'`
+    
+    if [ "$status" == "A" ]; then
+        echo "Do you want to add the file : $file"
+        echo "NOTE: If you select yes, clearcase will generate warnings but still work"
+        select yn in "Yes" "No"; do
+            case $yn in
+                Yes )
+                    cleartool mkelem -nc -mkp "$file" 2>&1 | grep --line-buffered -ve ".*\"Utilities.*No such file.*" | grep --line-buffered -ve ".*not found: \"C:\\Users.*"
+                    break;;
+                No )
+                    break;;
+            esac
+        done
+    fi
+    if [ "$status" == "D" ]; then
+        echo "Do you want to remove the file : $file"
+        echo "WARNING: THIS IS UNTESTED!!!!!!!"
+        select yn in "Yes" "No"; do
+            case $yn in
+                Yes )
+                    # Remake the file so it's not lost
+                    touch "$file"
+                    # Checkout the file and unhijack it
+                    cleartool update -overwrite "$file"
+                    # checkout the parent directory
+                    cleartool co -nc $(dirname "$file")
+                    # rmname the file
+                    cleartool rmname -nc "$file"
+                    break;;
+                No )
+                    break;;
+            esac
+        done
+    fi
+done
+# Set IFS back to before
+unset IFS
+
+# Check in the files
+echo "**** Checking in the checked out files"
+for file in `cleartool ls -recur | grep "CHECKEDOUT" | cut -d '@' -f1 | tr '\\\' '/' | sed -e 's. .\\\ .g'`
+do
+    # Get the commit log that applies to the current file
+    comment=$(git log --reverse --format=%B HEAD "$oldSha" "$file")
+    cleartool checkin -c "$comment" "$file"
+done
+
+# IDK what this does, but it was in the example.
+exec git update-server-info

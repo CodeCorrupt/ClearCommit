@@ -1,0 +1,41 @@
+New import to git
+	Snapshot view
+	git init
+	add all files
+	commit
+	
+	cd ..
+	mkdir <name>.git
+	cd <name>.git
+	git init --bare
+	cd ../<name>
+	
+	git remote add origin ../<name>.git
+	git push -u origin master
+	
+	cd ../<name>.git
+	vi hooks/post-update
+	// Copy in the provided script
+	
+	cd /working/directory/
+	git clone /snapshot/directory/<name>.git
+	
+	// Work as normal, only pushing to origin when you want to submit to clearcase.
+
+Background workflow
+
+
+MyWorking        Repo.git             CC Working
+###              ### pushed w/ git    ###
+### <----------> ### ---------------> ###
+###              ### <--------------- ###
+                 ^   pulled w/ cron    ^
+Other Guy        |                     |
+###              |                     |
+### <------------+                     |
+###                                    |
+                                       |
+            Non git looser             |
+            ###                        |
+            ### <----------------------+
+            ###
