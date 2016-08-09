@@ -42,7 +42,7 @@ while read -r status name; do
     echo "$status : $name"
     if [ $status == "M" ]; then
         echo "Modefied file: $name"
-        cleartool checkout -c "$comment" $name
+        cleartool checkout -c "$comment" "$name"
     fi
     if [ $status == "D" ]; then
         echo "Deleted file: $name"
@@ -76,16 +76,16 @@ echo "###################"
 while read -r status name; do
     if [ $status == "M" ]; then
         echo "Modefied file: $name"
-        cleartool checkin -c "$comment" $name
+        cleartool checkin -c "$comment" "$name"
     fi
     if [ $status == "D" ]; then
         echo "Deleting file: $name"
-        cleartool rmname -c "$comment" $name
+        cleartool rmname -c "$comment" "$name"
     fi
     if [ $status == "A" ]; then
         echo "Added file: $name"
-        cleartool mkelem -c "$comment" $name
-        cleartool checkin -c "$comment" $name
+        cleartool mkelem -c "$comment" "$name"
+        cleartool checkin -c "$comment" "$name"
     fi
     echo ""
     echo "Checking in $file"
