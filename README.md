@@ -4,29 +4,24 @@
 ```
 .                     ClearCase (CC) Snapshot
                  +-----------------------------------+
-MyWorking        | Repo.git               CC Working |                CC Remote
+Git Working      |  CC.git                CC Working |                CC Remote
 ######    push   |  ###### CC pull triggers ######   |  push after git   ######
 ###### <----------> ###### ---------------> ###### --|-----------------> ######
 ######    pull   |  ###### <--------------- ###### <-|------------------ ######
                  |      pull if trigger fails        |  Pull w/ git push   ^
                  +-----------------------------------+                     |
                                                                            |
-        Dumb CC User                                                       |
-            ######         push and pull using CC tools                    |
+         Dumb CC User                                                      |
+            ######             push and pull using CC tools                |
             ###### <-------------------------------------------------------+
             ######
 ```
 
 ## Steps for Git users
 ```
-1) Work in yuour working dir.
-2) Push to Repo.git
-3) push to repo triggers CC Working to pull in the new changes
-4) that trigger first pulls anything new from CC remote
-5v1) If anything new came in from CC Remote, fail push
-6v1) Repo.git pulls in the new changes that are in CC Working
-5v2) If nothing new came if from CC Remote, merge changes from git
-6v2) commit changes in CC working/sync to cc remote
+1) Work in your working directory as normal
+2) push and pull with co-workers
+3) When ready to commit to ClearCase, push to CC.git
 ```
 
 ## Steps for CC users
