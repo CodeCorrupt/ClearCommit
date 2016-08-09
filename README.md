@@ -1,5 +1,13 @@
 # Git To ClearCase
 
+## Setup
+1. Create a snapshot view with ClearCase
+2. `cd /path/to/snapshot`
+3. `curl https://raw.githubusercontent.com/CodeCorrupt/Git-To-ClearCase/master/setup.sh | /bin/bash`
+4. `cd /path/to/working/directory`
+5. `git clone file:///path/to/snapshot.git project-name`
+6. Be happy using git :smile:
+
 ## Data Flow Diagram
 ```
 .                     ClearCase (CC) Snapshot
