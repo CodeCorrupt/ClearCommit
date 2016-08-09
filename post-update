@@ -6,7 +6,7 @@ exec < /dev/tty
 
 echo "**** Pulling changes into clearcase"
 # CD into the snapshot directory
-cd cd "$(echo $PWD | sed -e 's/.git$//')"
+cd "$(echo $PWD | sed -e 's/.git$//')"
 unset GIT_DIR
 
 # Update the snapshot
@@ -33,7 +33,12 @@ git merge origin/master master
 #Checkout the files that are hijacked.
 echo "**** Begining checkout of now hijacked files"
 #             Get list of cleartool files        | only hijacked   |cut the filename|change \ --> /| escape spaces       | make online
-cleartool co -nc -usehijack `cleartool ls -recur | grep "hijacked" | cut -d '@' -f1 | tr '\\\' '/' | sed -e 's. .\\\ .g' | xargs`
+hijacked=$(cleartool ls -recur | grep "hijacked" | cut -d '@' -f1 | tr '\\' '/' | sed -e 's. .\\ .g' | xargs)
+# only try to checkout the files if there's something hijacked
+if [ ! -z $hijacked ]; then
+    echo "There were hijacked files: $hijacked"
+    cleartool co -nc -usehijack $hijacked
+fi
 
 echo "**** If any new/deleted/renamed files, select the ones to add"
 # Set IFS to only newline so that lines are split properly
@@ -45,11 +50,10 @@ do
 
     if [ "$status" == "A" ]; then
         echo "Do you want to add the file : $file"
-        echo "NOTE: If you select yes, clearcase will generate warnings but still work"
         select yn in "Yes" "No"; do
             case $yn in
                 Yes )
-                    cleartool mkelem -nc -mkp "$file" 2>&1 | grep --line-buffered -ve ".*\"Utilities.*No such file.*" | grep --line-buffered -ve ".*not found: \"C:\\Users.*"
+                    cleartool mkelem -nc -mkp "$file" 2>&1 | grep --line-buffered -ve ".*\"Utilities.*No such file.*" | grep --line-buffered -ve ".*\"C:\\Users.*"
                     break;;
                 No )
                     break;;
@@ -58,12 +62,9 @@ do
     fi
     if [ "$status" == "D" ]; then
         echo "Do you want to remove the file : $file"
-        echo "WARNING: THIS IS UNTESTED!!!!!!!"
         select yn in "Yes" "No"; do
             case $yn in
                 Yes )
-                    # Remake the file so it's not lost
-                    touch "$file"
                     # Checkout the file and unhijack it
                     cleartool update -overwrite "$file"
                     # checkout the parent directory

@@ -41,7 +41,9 @@ _Note: CC.git is view-private_
 ## TODO:
 - [x] Ability to modify files
 - [x] Ability to add new files
-- [ ] Ability to delete files
-- [ ] Automatically pull to repo if post-update fails
+- [x] Ability to delete files
+- [ ] Option to remove empty directory after file delete
+- [ ] Automatically pull new changes into CC.git from CC Working after `cleartool update .` in post-update
+- [ ] Decide if I should remove the prompt for add and delete? (Assume Yes)
 - [ ] Better logging and output for post-update
 - [ ] Error checking for setup.sh
