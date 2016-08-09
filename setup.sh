@@ -12,7 +12,7 @@ name=${PWD##*/}
 mkdir "../$name.git" && cd "../$name.git"
 git init --bare
 # Set up post-update
-wget -qP hooks "https://raw.githubusercontent.com/CodeCorrupt/ClearCommit/master/post-update"
+wget -qP hooks "https://raw.githubusercontent.com/CodeCorrupt/Git-To-ClearCase/master/post-update"
 
 # Set up the bare repo as the remote
 cd "../$name"
