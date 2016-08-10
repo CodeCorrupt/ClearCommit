@@ -13,10 +13,10 @@
 .                     ClearCase (CC) Snapshot
                  +-----------------------------------+
 Git Working      |  CC.git                CC Working |                CC Remote
-######    push   |  ###### CC pull triggers ######   |  push after git   ######
+######    push   |  ###### on post-receive  ######   |  push after git   ######
 ###### <----------> ###### ---------------> ###### --|-----------------> ######
 ######    pull   |  ###### <--------------- ###### <-|------------------ ######
-                 |      pull if trigger fails        |  Pull w/ git push   ^
+                 |    on changes w/ pre-receive      |  on pre-receive     ^
                  +-----------------------------------+                     |
                                                                            |
          Dumb CC User                                                      |
@@ -25,6 +25,19 @@ Git Working      |  CC.git                CC Working |                CC Remote
             ######
 ```
 _Note: CC.git is view-private_
+
+### Data Flow Triggers
+* Push Git Working to CC.git
+  * Pre-receive triggers _before_ any changes are made to CC.git
+    * Pulls changes (if any) from CC Remote into CC Working.
+    * If there were changes, push from CC Working to CC.git and **reject push** from Git Working
+    * If no changes then **Accept push** from Git Working
+  * Post-receive triggers _after_ refs are updated in CC.git
+    * Pull changes into CC Working from CC.git
+    * Commit the changes to CC (Push from CC Working to CC Remote)
+      * *Add/Delete*: Triggered by parsing `git diff --name-status prev_sha HEAD`
+      * *Renamed*: Same as Add/Delete. git reports the diff as an Add and a Delete.
+      * *Modified*: Triggered by asking CC what files have been "Hijacked".
 
 ## Steps for Git users
 ```
@@ -52,3 +65,4 @@ _Note: CC.git is view-private_
 ## To Think About
 - [ ] Should I remove the prompt for add and delete? (Assume Yes)
 - [ ] Add .gitignore to CC if created during setup? Prompt and ask?
+- [ ] For initial setup, all files not already in CC won't be added ever. Similarly, Any empty folders won't be cleaned up. This is because the status change in `git diff --name-status` is the only thing that triggers adding or deleting files. _Note: modification is triggered through hijacking files and renaming is just addition and deletion_
