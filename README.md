@@ -45,6 +45,10 @@ _Note: CC.git is view-private_
 - [ ] Option to remove empty directory after file delete
 - [ ] ~~Automatically pull new changes into CC.git from CC Working after `cleartool update .` in post-update~~
 - [ ] Pull updates from CC remote, thorugh CC Working into CC.git on pre-update
-- [ ] Decide if I should remove the prompt for add and delete? (Assume Yes)
+- [ ] Make post-update CC check in the parent dir of CC working as well
 - [ ] Better logging and output for post-update
 - [ ] Error checking for setup.sh
+
+## To Think About
+- [ ] Should I remove the prompt for add and delete? (Assume Yes)
+- [ ] Add .gitignore to CC if created during setup? Prompt and ask?
