@@ -37,7 +37,7 @@ echo "**** Begining checkout of now hijacked files"
 #             Get list of cleartool files        | only hijacked   |cut the filename|change \ --> /| escape spaces       | make online
 hijacked=$(cleartool ls -recur | grep "hijacked" | cut -d '@' -f1 | tr '\\' '/' | sed -e 's. .\\ .g' | xargs)
 # only try to checkout the files if there's something hijacked
-if [ ! -z $hijacked ]; then
+if [ ! -z "$hijacked" ]; then
     echo "There were hijacked files: $hijacked"
     cleartool co -nc -usehijack $hijacked
 fi
