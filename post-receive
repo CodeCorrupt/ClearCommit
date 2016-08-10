@@ -17,6 +17,7 @@ cleartool update .
 echo "**** Fetching changes into clearcase files"
 git fetch origin master
 
+
 #Check working directory is clean
 echo "**** Checking the status of the working directory"
 if [ $(git status --porcelain 2>/dev/null| grep "^[^?]" | wc -l) -ne 0 ]
@@ -89,6 +90,3 @@ do
     comment=$(git log --reverse --format=%B HEAD "$oldSha" "$file")
     cleartool checkin -c "$comment" "$file"
 done
-
-# IDK what this does, but it was in the example.
-exec git update-server-info
