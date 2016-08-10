@@ -21,7 +21,7 @@ cd ".."
 git remote add origin "file://$PWD/$GITTOCC"
 git push -u origin master
 
-# Set up post-update
+# Set up post-receive
 wget -qP "$PWD/$GITTOCC/hooks" "https://raw.githubusercontent.com/CodeCorrupt/Git-To-ClearCase/master/post-receive"
 
 # instruct the user
