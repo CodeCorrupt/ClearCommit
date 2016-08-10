@@ -1,35 +1,51 @@
 #!/bin/sh
 
+################################################################################
+# The post-receive script is a server side hook that will execute after a client
+# pushes to the server and the server updates it's objects and refs.
+#
+# What this script will do is cd into the working directory and pull down any
+# Changes introduced by the push. This workflow is consistant with that shown
+# at http://goo.gl/530jwI. Once these changes are pulled into ClearCase's (CC)
+# we go thorugh the process of commiting those changes thorugh to CC.
+#
+# Note: Remember this is executed from the root of the bare repo NOT repo/hooks
+################################################################################
+
+# Path to the CC Snapshot
+CCSNAP="$PWD/.."
+# Save the path to the bare repo
+CCGIT="$PWD"
+
 # Allows us to read user input below, assigns stdin to keyboard
-# REF: http://stackoverflow.com/questions/3417896/how-do-i-prompt-the-user-from-within-a-commit-msg-hook
+# REF: Stack overflow - http://goo.gl/hddkkV
 exec < /dev/tty
 
 echo "**** Pulling changes into clearcase"
 # CD into the snapshot directory
-cd "$(echo $PWD | sed -e 's/.git$//')"
+cd "$CCSNAP"
 unset GIT_DIR
 
+#TODO: Move this to pre-receive
 # Update the snapshot
 echo "**** Updating Clearcase snapshot"
 cleartool update .
 
-# Pull changes in and hijack the files
-echo "**** Fetching changes into clearcase files"
-git fetch origin master
-
-
-#Check working directory is clean
+# Check working directory is clean
+# If not clean that implies that changes were introduced externally thorugh CC
 echo "**** Checking the status of the working directory"
 if [ $(git status --porcelain 2>/dev/null| grep "^[^?]" | wc -l) -ne 0 ]
 then
     echo "~~ERROR: Working directory not clean"
         exit
 fi
+#TODO: Move that to pre-receive
 
 echo "**** Merging in origin master"
 # Save old sha to get log against
 oldSha=$(git rev-parse HEAD)
-git merge origin/master master
+# Pull in the changes
+git pull origin master
 
 #Checkout the files that are hijacked.
 echo "**** Begining checkout of now hijacked files"
