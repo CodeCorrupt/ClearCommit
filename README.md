@@ -43,7 +43,8 @@ _Note: CC.git is view-private_
 - [x] Ability to add new files
 - [x] Ability to delete files
 - [ ] Option to remove empty directory after file delete
-- [ ] Automatically pull new changes into CC.git from CC Working after `cleartool update .` in post-update
+- [ ] ~~Automatically pull new changes into CC.git from CC Working after `cleartool update .` in post-update~~
+- [ ] Pull updates from CC remote, thorugh CC Working into CC.git on pre-update
 - [ ] Decide if I should remove the prompt for add and delete? (Assume Yes)
 - [ ] Better logging and output for post-update
 - [ ] Error checking for setup.sh
