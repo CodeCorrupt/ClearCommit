@@ -62,6 +62,7 @@ _Note: CC.git is view-private_
 - [ ] Make post-receive CC check in the parent dir of CC working as well
 - [ ] Better logging and output for pre/post-receive
 - [ ] Error checking for setup.sh
+- [ ] Error handling if someone has checkout/reserved file in CC. (Errors on "Checking out hijacked files")
 
 ## To Think About
 * Should I remove the prompt for add and delete? (Assume Yes)
