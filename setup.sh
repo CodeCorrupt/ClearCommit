@@ -23,6 +23,7 @@ git push -u origin master
 
 # Set up post-receive
 wget -qP "$PWD/$GITTOCC/hooks" "https://raw.githubusercontent.com/CodeCorrupt/Git-To-ClearCase/master/post-receive"
+wget -qP "$PWD/$GITTOCC/hooks" "https://raw.githubusercontent.com/CodeCorrupt/Git-To-ClearCase/master/pre-receive"
 
 # instruct the user
 echo ""

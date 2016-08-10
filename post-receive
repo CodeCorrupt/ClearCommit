@@ -2,7 +2,7 @@
 
 ################################################################################
 # The post-receive script is a server side hook that will execute after a client
-# pushes to the server and the server updates it's objects and refs.
+# pushes to the server and the server updates it's refs.
 #
 # What this script will do is cd into the working directory and pull down any
 # Changes introduced by the push. This workflow is consistant with that shown
@@ -25,21 +25,6 @@ echo "**** Pulling changes into clearcase"
 # CD into the snapshot directory
 cd "$CCSNAP"
 unset GIT_DIR
-
-#TODO: Move this to pre-receive
-# Update the snapshot
-echo "**** Updating Clearcase snapshot"
-cleartool update .
-
-# Check working directory is clean
-# If not clean that implies that changes were introduced externally thorugh CC
-echo "**** Checking the status of the working directory"
-if [ $(git status --porcelain 2>/dev/null| grep "^[^?]" | wc -l) -ne 0 ]
-then
-    echo "~~ERROR: Working directory not clean"
-        exit
-fi
-#TODO: Move that to pre-receive
 
 echo "**** Merging in origin master"
 # Save old sha to get log against

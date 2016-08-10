@@ -5,7 +5,7 @@
 2. `cd /path/to/snapshot`
 3. `curl https://raw.githubusercontent.com/CodeCorrupt/Git-To-ClearCase/master/setup.sh | /bin/bash`
 4. `cd /path/to/working/directory`
-5. `git clone file:///path/to/snapshot.git project-name`
+5. `git clone file:///path/to/snapshot/.gittocc project-name`
 6. Be happy using git :smile:
 
 ## Data Flow Diagram
@@ -56,13 +56,15 @@ _Note: CC.git is view-private_
 - [x] Ability to add new files
 - [x] Ability to delete files
 - [ ] Option to remove empty directory after file delete
+- [ ] Exit post-receive early if nothing to push to CC. (ie. when pushing changes coming in from CC Remote)
 - [ ] ~~Automatically pull new changes into CC.git from CC Working after `cleartool update .` in post-receive~~
-- [ ] Pull updates from CC remote, thorugh CC Working into CC.git on pre-update
+- [x] Pull updates from CC remote, thorugh CC Working into CC.git on pre-update
 - [ ] Make post-receive CC check in the parent dir of CC working as well
-- [ ] Better logging and output for post-receive
+- [ ] Better logging and output for pre/post-receive
 - [ ] Error checking for setup.sh
 
 ## To Think About
-- [ ] Should I remove the prompt for add and delete? (Assume Yes)
-- [ ] Add .gitignore to CC if created during setup? Prompt and ask?
-- [ ] For initial setup, all files not already in CC won't be added ever. Similarly, Any empty folders won't be cleaned up. This is because the status change in `git diff --name-status` is the only thing that triggers adding or deleting files. _Note: modification is triggered through hijacking files and renaming is just addition and deletion_
+* Should I remove the prompt for add and delete? (Assume Yes)
+* Add .gitignore to CC if created during setup? Prompt and ask?
+* For initial setup, all files not already in CC won't be added ever. Similarly, Any empty folders won't be cleaned up. This is because the status change in `git diff --name-status` is the only thing that triggers adding or deleting with CC. Updates to files not tracked in CC will still propagate to CC Working thought git. _Note: modification is triggered through hijacking files and renaming is just addition and deletion_
+* pre-receive is pushing to itself, which should be okay for now, but may lead to interesting bugs down the road with it getting stuck in a loop.

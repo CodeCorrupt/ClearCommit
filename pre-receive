@@ -1,0 +1,50 @@
+#!/bin/bash
+
+################################################################################
+# The pre-receive script is a server side hook that will execute before a client
+# pushes to the server and the server updates it's refs.
+#
+# What this script does is pull update CC Working from CC Remote and check if
+# there are any changes introduced. If changes are introduced then make a git
+# commit out of those changes and push them to thie CC.git. After this, stop the
+# push and instruct the user to pull changes into their Git Working directory
+# and merge before pushing.
+#
+# Note: If changes are found, this script will end up being called recursively.
+# This is because it pushes to itself, and this is a pre push script. However,
+# this second call should immediately return 0 and continue with the push since
+# there shouldn't be any new changes to clearcase in that fraction of a second.
+################################################################################
+
+echo "*****************************************"
+echo "Updating ClearCase snapshot"
+
+# Constants
+CCSNAP="$PWD/.."
+CCGIT="$PWD"
+
+# Change into snapshot dir
+cd "$CCSNAP"
+unset GIT_DIR
+
+# update cleartool and from the output get the name of the log file
+file="$(cleartool update . 2>&1| grep "Log has been written to" | cut -d '"' -f2)"
+
+# Read the log file and get just the number of bytes copied
+bytesCopied=$(cat "$file" | grep -e '^BytesCopied' | cut -d ':' -f2 | xargs)
+
+if [ "$bytesCopied" == "0" ]; then
+    exit 0 # Allow pull to continue
+else
+    # commit the changes and push them to CC.git
+    git add -A
+    git commit -m "GTCC: Pulled in changes from ClearCase remote"
+
+    echo "INFO: While pushing CC's remote changes to CC.git you will see the post-receive hook run."
+    echo "      This is expected behavior."
+    git push origin master
+
+    echo "Cleartool pulled updates from ClearCase remote."
+    echo "Please pull 'git pull' these changes and merge before pushing"
+    exit 69 # Any non 0 return stops the push process
+fi
