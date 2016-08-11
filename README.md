@@ -2,11 +2,12 @@
 
 ## Setup
 1. Create a snapshot view with ClearCase
-2. `cd /path/to/snapshot`
-3. `curl https://raw.githubusercontent.com/CodeCorrupt/Git-To-ClearCase/master/setup.sh | /bin/bash`
-4. `cd /path/to/working/directory`
-5. `git clone file:///path/to/snapshot/.gittocc project-name`
-6. Be happy using git :smile:
+2. open a Bash prompt that has git.
+3. `cd /path/to/snapshot`
+4. `curl https://raw.githubusercontent.com/CodeCorrupt/Git-To-ClearCase/master/setup.sh | /bin/bash`
+5. `cd /path/to/working/directory`
+6. `git clone file:///path/to/snapshot/.gittocc project-name`
+7. Be happy using git :smile:
 
 ## Data Flow Diagram
 ```
@@ -40,16 +41,13 @@ _Note: CC.git is view-private_
       * *Modified*: Triggered by asking CC what files have been "Hijacked".
 
 ## Steps for Git users
-```
-1) Work in your working directory as normal
-2) push and pull with co-workers
-3) When ready to commit to ClearCase, push to CC.git
-```
+1. Work in your working directory as normal
+2. push and pull with co-workers
+3. When ready to commit to ClearCase, push to CC.git
 
 ## Steps for CC users
-```
-1) Nothing changes
-```
+1. Nothing changes
+2. Carry on
 
 ## TODO:
 - [x] Ability to modify files
