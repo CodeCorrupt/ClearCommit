@@ -57,7 +57,6 @@ _Note: CC.git is view-private_
 - [x] Ability to delete files
 - [ ] Option to remove empty directory after file delete
 - [ ] Exit post-receive early if nothing to push to CC. (ie. when pushing changes coming in from CC Remote)
-- [ ] ~~Automatically pull new changes into CC.git from CC Working after `cleartool update .` in post-receive~~
 - [x] Pull updates from CC remote, thorugh CC Working into CC.git on pre-update
 - [ ] Make post-receive CC check in the parent dir of CC working as well
 - [ ] Better logging and output for pre/post-receive

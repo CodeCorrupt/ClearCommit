@@ -25,8 +25,6 @@ echo "**** Pulling changes into clearcase"
 # CD into the snapshot directory
 cd "$CCSNAP"
 unset GIT_DIR
-
-echo "**** Merging in origin master"
 # Save old sha to get log against
 oldSha=$(git rev-parse HEAD)
 # Pull in the changes
@@ -34,8 +32,10 @@ git pull origin master
 
 #Checkout the files that are hijacked.
 echo "**** Begining checkout of now hijacked files"
-#             Get list of cleartool files        | only hijacked   |cut the filename|change \ --> /| escape spaces       | make online
-hijacked=$(cleartool ls -recur | grep "hijacked" | cut -d '@' -f1 | tr '\\' '/' | sed -e 's. .\\ .g' | xargs)
+# Get list of cleartool files  | only hijacked   |cut the filename
+hijacked=$(cleartool ls -recur | grep "hijacked" | cut -d '@' -f1 \
+                | tr '\\' '/' | sed -e 's. .\\ .g' | xargs)
+#               |change \ --> /| escape spaces       | make online
 # only try to checkout the files if there's something hijacked
 if [ ! -z "$hijacked" ]; then
     echo "There were hijacked files: $hijacked"
@@ -55,7 +55,7 @@ do
         select yn in "Yes" "No"; do
             case $yn in
                 Yes )
-                    cleartool mkelem -nc -mkp "$file" 2>&1 | grep --line-buffered -ve ".*\"Utilities.*No such file.*" | grep --line-buffered -ve ".*\"C:\\Users.*"
+                    cleartool mkelem -nc -mkp "$file" 2>&1
                     break;;
                 No )
                     break;;
@@ -85,7 +85,8 @@ unset IFS
 
 # Check in the files
 echo "**** Checking in the checked out files"
-for file in `cleartool ls -recur | grep "CHECKEDOUT" | cut -d '@' -f1 | tr '\\\' '/' | sed -e 's. .\\\ .g'`
+for file in $(cleartool ls -recur | grep "CHECKEDOUT" | cut -d '@' -f1 \
+                  | tr '\\' '/' | sed -e 's. .\\ .g')
 do
     # Get the commit log that applies to the current file
     comment=$(git log --reverse --format=%B HEAD "$oldSha" "$file")
