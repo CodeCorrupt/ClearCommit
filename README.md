@@ -58,10 +58,10 @@ _Note: CC.git is view-private_
 - [ ] Option to remove empty directory after file delete
 - [ ] Exit post-receive early if nothing to push to CC. (ie. when pushing changes coming in from CC Remote)
 - [x] Pull updates from CC remote, thorugh CC Working into CC.git on pre-update
-- [ ] Make post-receive CC check in the parent dir of CC working as well
+- [x] Make post-receive CC check in the parent dir of CC working as well
 - [ ] Better logging and output for pre/post-receive
 - [ ] Error checking for setup.sh
-- [ ] Error handling if someone has checkout/reserved file in CC. (Errors on "Checking out hijacked files")
+- [ ] Error handling if someone has checkout/reserved file in CC. (Errors on "Checking out hijacked files") Running the post-receive hook again once other users has checked the file in finish the job.
 
 ## To Think About
 * Should I remove the prompt for add and delete? (Assume Yes)

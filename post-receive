@@ -85,10 +85,13 @@ unset IFS
 
 # Check in the files
 echo "**** Checking in the checked out files"
-for file in $(cleartool ls -recur | grep "CHECKEDOUT" | cut -d '@' -f1 \
-                  | tr '\\' '/' | sed -e 's. .\\ .g')
+for file in $(cleartool ls -recur .. | grep "CHECKEDOUT" | cut -d '@' -f1 \
+              | tr '\\' '/' | sed -e 's. .\\ .g' | grep -e "^../${PWD##*/}")
 do
     # Get the commit log that applies to the current file
     comment=$(git log --reverse --format=%B HEAD "$oldSha" "$file")
     cleartool checkin -c "$comment" "$file"
 done
+
+echo "**** Checking in the parent directory"
+cleartool checkin -nc "."
