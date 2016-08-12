@@ -9,9 +9,12 @@
 6. `git clone file:///path/to/snapshot/.gittocc project-name`
 7. Be happy using git :smile:
 
+## How It Works
+GTCC at it's core is a work-flow using Git's hook system to manage the bridge between Git and CC. This approach to creating a bridge enables both CC and Git users to work how they are most comfortable while still keeping the two repositories in sync.
+
 ## Data Flow Diagram
 ```
-.                     ClearCase (CC) Snapshot
+.                        ClearCase (CC) Snapshot
                  +-----------------------------------+
 Git Working      |  CC.git                CC Working |                CC Remote
 ######    push   |  ###### on post-receive  ######   |  push after git   ######
@@ -25,7 +28,6 @@ Git Working      |  CC.git                CC Working |                CC Remote
             ###### <-------------------------------------------------------+
             ######
 ```
-_Note: CC.git is view-private_
 
 ### Data Flow Triggers
 * Push Git Working to CC.git
