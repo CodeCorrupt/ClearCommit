@@ -68,3 +68,25 @@ Git Working      |  CC.git                CC Working |                CC Remote
 * Add .gitignore to CC if created during setup? Prompt and ask?
 * For initial setup, all files not already in CC won't be added ever. Similarly, Any empty folders won't be cleaned up. This is because the status change in `git diff --name-status` is the only thing that triggers adding or deleting with CC. Updates to files not tracked in CC will still propagate to CC Working thought git. _Note: modification is triggered through hijacking files and renaming is just addition and deletion_
 * pre-receive is pushing to itself, which should be okay for now, but may lead to interesting bugs down the road with it getting stuck in a loop.
+
+## Where It's Going
+#### Support for Branching in CC
+```
+.                                     CC Branch B
+                                        ######     
+                      +---------------->######<----------------------------+
+                      |                 ######      CC Branch C            |
+                      |+----------------------------->######<-------------+|
+                      ||                              ######              ||
+                      VV                              ######              VV
+Git Working         CC.git                CC Branch A                 CC Remote
+######    push      ######  post-update A   ######      push after git   ######
+###### <----------> ###### ---------------> ###### -- -----------------> ######
+######    pull      ###### <--------------- ###### <- ------------------ ######
+                      on changes w/ pre-update A        on pre-upate A     ^
+                                                                           |
+            CC User                                                        |
+            ######             push and pull using CC tools                |
+            ###### <-------------------------------------------------------+
+            ######
+```
