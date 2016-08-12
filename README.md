@@ -23,7 +23,7 @@ Git Working      |  CC.git                CC Working |                CC Remote
                  |    on changes w/ pre-receive      |  on pre-receive     ^
                  +-----------------------------------+                     |
                                                                            |
-         Dumb CC User                                                      |
+            CC User                                                        |
             ######             push and pull using CC tools                |
             ###### <-------------------------------------------------------+
             ######
