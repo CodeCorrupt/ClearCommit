@@ -21,14 +21,22 @@ CCGIT="$PWD"
 # REF: Stack overflow - http://goo.gl/hddkkV
 exec < /dev/tty
 
-echo "**** Pulling changes into clearcase"
+echo "**** Fetching changes"
 # CD into the snapshot directory
 cd "$CCSNAP"
 unset GIT_DIR
 # Save old sha to get log against
 oldSha=$(git rev-parse HEAD)
 # Pull in the changes
-git pull origin master
+git fetch origin
+
+if [ ! -z "$(git status | grep 'up-to-date')" ]; then
+  echo "**** No new changes: Exiting Early"
+  exit 0
+fi
+
+echo "**** Merging in changes"
+git merge origin/master
 
 #Checkout the files that are hijacked.
 echo "**** Begining checkout of now hijacked files"
