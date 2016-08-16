@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+
+import imp, sys, os, subprocess
+def main(ref):
+  # Import the configuration file
+  config = imp.load_source('config', 'GTCCConfig.py').config
+  
+  # Set the git environment to execute out of the snapshot dir
+  gitPath = config["Tracking"][ref]
+  os.environ["GIT_DIR"] = gitPath + "/.git"
+  os.environ["GIT_WORK_TREE"] = gitPath
+  
+  output = subprocess.check_output(["cleartool", "update", gitPath])
+  
+  print output
+  
+  # Return non-zero so that it doesn't update
+  return -1
+
+if __name__ == "__main__":
+  sys.exit(main(sys.argv[1]))
