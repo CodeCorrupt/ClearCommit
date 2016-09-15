@@ -56,6 +56,8 @@ Git Working      |  CC.git                CC Working |                CC Remote
 - [x] Ability to add new files
 - [x] Ability to delete files
 - [ ] Option to remove empty directory after file delete
+- [ ] Remove need to hijack files. Possibly checkout files it looks like we need from git diff.
+- [ ] Fix ClearCase so it doesn't show untrue error messages. (See paths with spaces in the name)
 - [x] Exit post-receive early if nothing to push to CC. (ie. when pushing changes coming in from CC Remote)
 - [x] Pull updates from CC remote, thorugh CC Working into CC.git on pre-update
 - [x] Make post-receive CC check in the parent dir of CC working as well
